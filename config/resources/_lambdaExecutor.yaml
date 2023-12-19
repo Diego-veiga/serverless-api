@@ -1,0 +1,6 @@
+Resources:
+  IamRoleLambdaExecution:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /eng-roles/
+      PermissionsBoundary: "arn:aws:iam::${aws:accountId}:policy/roles-boundary"

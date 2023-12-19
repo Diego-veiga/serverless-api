@@ -1,0 +1,53 @@
+service: DevsFuturo
+frameworkVersion: '3'
+
+# custom:
+#   webpack:
+#     webpackConfig: './webpack.config.js'
+#     includeModules: true
+custom:
+  webpack:
+    webpackConfig: webpack.config.js
+    excludeFiles: src/**/*.test.js
+    excludeRegex: \.ts|test|\.map
+    keepOutputDirectory: false
+    serializedCompile: true
+    packager: npm
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+
+functions:
+  createUser:
+    handler: src/customer/functions/create.handler
+    events:
+      - httpApi:
+          path: /customer
+          method: post
+  updateUser:
+    handler: src/customer/functions/update.handler
+    events:
+      - httpApi:
+          path: /customer/{document}
+          method: put
+  deleteuser:
+    handler: src/customer/functions/delete.handler
+    events:
+      - httpApi:
+          path: /customer/{document}
+          method: delete
+  getByDocument:
+    handler: src/customer/functions/getByDocument.handler
+    events:
+      - httpApi:
+          path: /customer/{document}
+          method: get
+
+plugins:
+  - serverless-offline
+  - serverless-webpack
+  # - serverless-plugin-typescript
+resources:
+  - ${file(./config/resources/_lambdaExecutor.yaml)}
+  - ${file(./config/resources/dynamo.resource.yaml)}
